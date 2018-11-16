@@ -81,7 +81,7 @@ router.get('/', (req, res) => {
 
 //크롤링 적용
 router.post('/add_item', (req,res) => {
-  var url = "http://www.topten10.co.kr/product/view.asp?productNo=41106";
+  var url = "http://www.topten10.co.kr/product/view.asp?productNo=41114";
   
   var add_item = new Item();
   dic={};
@@ -90,11 +90,9 @@ router.post('/add_item', (req,res) => {
     const $ = cheerio.load(body);
     //상품 이름
     const name=$('.name').text();
-    console.log(name);
 
     //상품 가격
     const price=$('.tPrice').contents()[0].data;
-    console.log(price);
 
     //상품 이미지
     const image_link="http:"+$('#gvLargeImg').attr('presrc');
@@ -127,12 +125,12 @@ router.post('/add_item', (req,res) => {
 
 router.post('/add_item1', (req,res) => {
   var add_item = new Item();
-  add_item.itemId = itemData.itemId;
-  add_item.name = itemData.name;
-  add_item.price = itemData.price;
-  add_item.link = itemData.link;
-  add_item.image_link = itemData.image_link;
-  add_item.tags = itemData.tags;
+  add_item.itemId = itemData_1.itemId;
+  add_item.name = itemData_1.name;
+  add_item.price = itemData_1.price;
+  add_item.link = itemData_1.link;
+  add_item.image_link = itemData_1.image_link;
+  add_item.tags = itemData_1.tags;
   console.log(add_item);
   /*size: {sizeHeader: String,
   partSizeHeader: {String},
