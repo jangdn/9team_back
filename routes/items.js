@@ -150,7 +150,8 @@ router.post('/add_item1', (req,res) => {
 
 router.get('/:itemId', (req, res) => {
   const { itemId } = req.params;
-  Item.findOne({itemId : itemId},(err, item)=>{
+  console.log(itemId);
+  Item.findOne({itemId : itemId.slice(1)},(err, item)=>{
     if(err) return res.status(500).json({error: err});
     if(!item) return res.status(404).json({error: 'item not found'});
     res.json(item);
