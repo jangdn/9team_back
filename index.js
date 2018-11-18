@@ -34,4 +34,4 @@ db.once('open', function(){
     console.log("Connected to mongodb server");
 });
 
-mongoose.connect('mongodb://localhost/testdb');
+mongoose.connect('mongodb://localhost/SEdb');
