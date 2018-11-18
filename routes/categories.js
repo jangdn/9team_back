@@ -3,6 +3,7 @@ const router = require('express').Router();
 const categoryData = [
   '상의', '하의', '아우터', '신발', '기타'
 ];
+//링크 빼도 될 거 같다는 의견181118
 const subCategoryData = {
   상의: [
     {
