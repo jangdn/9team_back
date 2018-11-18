@@ -74,6 +74,7 @@ const itemData = [
   tags : ["아우터", "재킷","유니클로","오프화이트","그레이","블랙","레드","와인","브라운","다크그린","블루","네이비"],
 },
 //4
+/*
 {
   itemId : randomstring.generate(10),
   name : "18FW 그레이 컬러 블록 올 블렌드 노버튼 카디건",
@@ -83,6 +84,7 @@ const itemData = [
   
   tags : ["상의","스웨터","에잇세컨즈","그레이"],
 },
+*/
 //5
 {
   itemId : randomstring.generate(10),
@@ -125,6 +127,7 @@ const itemData = [
   tags : ["상의","스웨터","에이치앤엠","네이비"],
 },
 //9
+/*
 {
   itemId : randomstring.generate(10),
   name : "집업 가디건",
@@ -134,6 +137,7 @@ const itemData = [
   
   tags : ["상의","스웨터","에이치앤엠","다크그레이"],
 },
+*/
 //10
 {
   itemId : randomstring.generate(10),
@@ -144,15 +148,14 @@ const itemData = [
   
   tags : ["상의","후드","에잇세컨즈","그레이"],
 },
-//11
 {
   itemId : randomstring.generate(10),
-  name : "프리미엄 캐시미어 라운드 니트",
-  price : "98100",
-  link : "http://www.coor.kr/shop/shopdetail.html?branduid=2588591&xcode=009&mcode=002&scode=&type=X&sort=order&cur_code=009&GfDT=bm56W11C",
-  image_link : "http://coorcoor.img5.kr/MS_product/2588591/1537366802_997316.jpg",
+  name : "스트라이프크루넥스웨터(긴팔)",
+  price : "39900",
+  link : "https://store-kr.uniqlo.com/display/showDisplayCache.lecs?goodsNo=NQ31116575&displayNo=NQ1A01A11A10&stonType=P&storeNo=83&siteNo=50706",
+  image_link : "https://simage-kr.uniqlo.com/goods/31/11/65/75/413283_COL_COL04_1000.jpg",
   
-  tags : ["상의","스웨터","쿠어","아보카도"],
+  tags : ["상의","스웨터","회색","체크"],
 },
 //12
 {
@@ -170,7 +173,7 @@ const itemData = [
   name : "미니멀 크롭 자켓 그레이",
   price : "139000",
   link : "http://mrpokerface.co.kr/product/detail.html?product_no=333&cate_no=30&display_group=1",
-  image_link : "http://mrpokerface.co.kr/web/product/17ss/mimal%20jacket/grey/pre1NEW.jpg",
+  image_link : "http://mrpokerface.co.kr/web/product/17ss/mimal%20jacket/grey/p1.jpg",
   
   tags : ["아우터","재킷","포커페이스","그레이"],
 },
@@ -182,7 +185,7 @@ const itemData = [
   link : "http://moyen.co.kr/product/detail.html?product_no=14438&cate_no=25&display_group=2",
   image_link : "http://moyen.co.kr/web/product/big/201810/e2cb8f5bc2d95a4dbe2fd3f77eb24da5.jpg",
   
-  tags : ["상의","니트","모옌","블랙"],
+  tags : ["상의","스웨터","모옌","블랙"],
 },
 //15
 {
@@ -249,25 +252,17 @@ const itemData = [
   tags : ["상의","셔츠","드로우핏","카멜"],
 },
 
+//21
 {
   itemId : randomstring.generate(10),
-  name : "모직 루즈핏 싱글 코트",
-  price : "59800",
-  link : "http://smallman.co.kr/product/detail.html?product_no=100645&cate_no=39&display_group=2",
-  image_link : "http://smallman.co.kr/web/product/big/201710/100645_shop1_988641.jpg",
+  name : "울캐시미어체스터필드코트",
+  price : "169000",
+  link : "https://store-kr.uniqlo.com/display/showDisplayCache.lecs?goodsNo=NQ31113870&displayNo=NQ1A01A10A02&stonType=P&storeNo=83&siteNo=50706",
+  image_link : "https://simage-kr.uniqlo.com/goods/31/11/38/70/409337_COL_COL36_1000.jpg",
   
-  tags : ["아우터", "코트", "키작남", "베이지", "그레이", "블랙"],
+  tags : ["아우터","코트","유니클로","브라운"],
 },
 
-{
-  itemId : randomstring.generate(10),
-  name : "8aw long duffle coat",
-  price : "260100",
-  link : "http://www.thet-shirtmuseum.com/shop/shopdetail.html?branduid=622949&xcode=028&mcode=000&scode=&type=P&sort=order&cur_code=028&GfDT=Zmp3UA%3D%3D",
-  image_link : "http://tsmuseum.img13.kr/bbshop451/images/18aw_long_dufflecoat_cream12.jpg",
-  
-  tags : ["아우터", "코트", "더티셔츠뮤지엄", "크림"],
-}
 ]
 
 
