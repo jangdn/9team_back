@@ -9,7 +9,7 @@ const subCategoryData = {
       '티셔츠', '셔츠','스웨터','후드'
   ],
   하의: [
-      '청바지','데님','반바지',
+      '팬츠','데님','반바지',
   ],
   아우터: [
     '재킷','점퍼','다운','코트','가죽','코트'
@@ -29,7 +29,7 @@ router.get('/', (req, res) => {
 router.get('/:category', (req, res) => {
   //console.log(req.params);
   const { category } = req.params;
-  res.json(subCategoryData[category.slice(1)]);
+  res.json(subCategoryData[category]);
 });
 
 module.exports = router;
