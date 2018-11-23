@@ -4,6 +4,7 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 const cheerio = require('cheerio');
 const request = require('request');
+const Item = require('./model/model_items')
 
 /* size_table 예시
 const size_table ={
@@ -19,29 +20,6 @@ const size_table ={
       ]
     }
 */
-
-var ItemSchema = new Schema({
-    "itemId": String,
-    "name" : String,
-    "price" : String,
-    "link" : String,
-    "image_link": String,
-    "main_ctg" : String,
-    "sub_ctg" : String,
-    "brand" : String,
-    "color" : Array,
-    "tags" : Array,
-    /*col_size: {
-      col_size: Array, 
-      raw_size : Array,
-        size_array: Array{Array},
-    }
-    */
-    //대분류, 소분류, 색상, 브랜드 순서!
-    //published_date: { type: Date, default: Date.now  }
-});
-
-const Item = mongoose.model('item', ItemSchema);
 
 //1
 const itemData = [

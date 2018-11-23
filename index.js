@@ -5,6 +5,8 @@ const logger = require('morgan');
 const categories = require('./routes/categories')
 const items = require('./routes/items')
 const users = require('./routes/users')
+const reviews = require('./routes/reviews')
+
 const mongoose = require('mongoose');
 
 const app = express();
@@ -20,6 +22,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use('/api/categories', categories);
 app.use('/api/items', items);
 app.use('/api/users', users);
+app.use('/api/reviews', reviews);
+
 
 
 app.use((err, req, res, next) => {
