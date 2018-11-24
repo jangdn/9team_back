@@ -65,17 +65,7 @@ const reviewData =[
     },
 ]
 
-  /*
-  "reivewId": String,
-    "userId" : String,
-    "itemId" : String,
-    "public_date" : {type : Date, default : Date.now},
-    "title" : String,
-    "content" : String,
-    "up" : {type : Number, default : 0},
-  */
-
-router.post('/add_reviews_direct', (req, res) => {
+router.post('/adddirect', (req, res) => {
     for (var i = 0; i < reviewData.length; i++){
         console.log(i); 
         var add_review = new Review();
@@ -85,17 +75,7 @@ router.post('/add_reviews_direct', (req, res) => {
         add_review.title = reviewData[i].title;
         add_review.content = reviewData[i].content;
         add_review.up = reviewData[i].up;
-        /*
-        var phy_attr;
-        function getData(){
-            return new Promise(function (resolve, reject){
-                User.findOne({userId : add_review.userId},(err, user) => {
-                resolve(user.phy_attr);
-                });
-            });
-        }
-        add_review.phy_attr = await phy_attr;
-        */
+
         console.log(add_review);
         add_review.save()
             .then(result => console.log(result))
@@ -104,34 +84,30 @@ router.post('/add_reviews_direct', (req, res) => {
     res.json({result:"review update"});
 });
 
+router.post('/users/:userID/items/:itemID', (req, res) => {
+    const { userId } = req.params;
+    const {itemId} = req.params;
+    var add_review = new Review();
+    add_review.reviewId = randomstring.generate(10);
+    add_review.userId = userId;
+    add_review.itemId = itemId;
+    add_review.title = req.body.title;
+    add_review.content = req.body.content;
 
-router.post('/add_reviews_direct', (req, res) => {
-    for (var i = 0; i < reviewData.length; i++){
-        console.log(i); 
-        var add_review = new Review();
-        add_review.reviewId = reviewData[i].reviewId;
-        add_review.userId = reviewData[i].userId;
-        add_review.itemId = reviewData[i].itemId;
-        add_review.title = reviewData[i].title;
-        add_review.content = reviewData[i].content;
-        add_review.up = reviewData[i].up;
-
-        console.log(add_review);
-        add_review.save()
+    console.log(add_review);
+    add_review.save()
         .then(result => console.log(result))
         .catch(err => console.log(err));
-    };
     res.json({result:"review update"});
 });
 
 
-router.post('/up/:reviewId', (req, res) => {
+router.put('/up/:reviewId', (req, res) => {
     const { reviewId } = req.params;
     Review.findOne({reviewId : reviewId},(err, review) => {
         console.log(review);
         if(err) return res.status(500).json({ error: 'database failure' });
         if(!review) return res.status(404).json({ error: 'user not found' });
-        review.reviewId = reviewId;
         review.up = review.up+1;
         console.log(review.up);
         review.save(function(err){
@@ -141,7 +117,7 @@ router.post('/up/:reviewId', (req, res) => {
     });
 });
 
-router.get('/item/:itemId', (req, res) => {
+router.get('/items/:itemId', (req, res) => {
     const { itemId } = req.params;
     console.log(itemId);
     Review.find({itemId : itemId},(err, review)=>{
@@ -157,7 +133,7 @@ router.get('/item/:itemId', (req, res) => {
     });
 });
 
-router.get('/user/:userId', (req, res) => {
+router.get('/users/:userId', (req, res) => {
     const { userId } = req.params;
     console.log(userId);
     Review.find({userId : userId},(err, review)=>{
@@ -173,22 +149,22 @@ router.get('/user/:userId', (req, res) => {
     });
   });
 
-  router.get('/today', (req, res) => {
+router.get('/today', (req, res) => {
     Review.find({"up":{$gte:100}},(err, review)=>{
-      if(err) return res.status(500).json({error: err});
-      if(!review) return res.status(404).json({error: 'review not found'});
-      //console.log(item);
-      console.log(review.length);
-      var rand = Math.floor((Math.random() * review.length));
-      console.log(rand);
+        if(err) return res.status(500).json({error: err});
+        if(!review) return res.status(404).json({error: 'review not found'});
+        //console.log(item);
+        console.log(review.length);
+        var rand = Math.floor((Math.random() * review.length));
+        console.log(rand);
 
-      res.json(review[rand]);
-      /*
+        res.json(review[rand]);
+        /*
         totags(item)
         .then((item)=>{res.json(item);})
         .catch(err => console.log(err));
-      */
+        */
     });
-  });
+});
 
 module.exports = router;

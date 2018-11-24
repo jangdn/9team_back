@@ -59,7 +59,7 @@ router.get('/', (req, res) => {
   "phy_attr" : Array,
   "wantItem" : Array,
   */
-router.post('/add_users_direct', (req, res) => {
+router.post('/adddirect', (req, res) => {
     for (var i = 0; i < userData.length; i++){
         console.log(i); 
         var add_user = new User();
@@ -78,22 +78,21 @@ router.post('/add_users_direct', (req, res) => {
 });
 
 
-
-router.post('/favorites/:IDs', (req, res) => {
-    const { IDs } = req.params;
-    var userId, itemId;
-    userId = IDs.split(',')[0];
-    itemId= IDs.split(',')[1];
+//userId 생기면 바꿔야할 부분
+router.put('/:userId/favorites/:itemId', (req, res) => {
+    const { userId } = req.params;
+    const { itemId } = req.params;
+    console.log(userId, itemId);
     User.findOne({userId : userId},(err, user) => {
         console.log(user);
         if(err) return res.status(500).json({ error: 'database failure' });
         if(!user) return res.status(404).json({ error: 'user not found' });
-        user.userId = userId;
+        //ITEM
         user.wantItem.push(itemId);
         console.log(user.wantItem);
         user.save(function(err){
             if(err) res.status(500).json({error: 'failed to update'});
-            res.json({message: 'user want updated'});
+            res.status(200).json({message: 'user want updated'});
         });
     });
 });

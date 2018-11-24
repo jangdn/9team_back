@@ -339,7 +339,8 @@ router.get('/', (req, res) => {
     var main_q = {"main_ctg" : tags[1]};
   if(tags[2] == "all")
     var sub_q = {"sub_ctg" : {$nin : [1]}};
-  else
+  e
+  lse
     var sub_q = {"sub_ctg" : tags[2]};
   var color_tags = tags.slice(3);
   console.log(color_tags);
@@ -376,7 +377,7 @@ router.get('/all', (req, res) => {
 
 
 //크롤링 적용
-router.post('/add_item_crawling', (req,res) => {
+router.post('/addcrawling', (req,res) => {
   var url = "http://www.topten10.co.kr/product/view.asp?productNo=41114";
   
   var add_item = new Item();
@@ -419,7 +420,7 @@ router.post('/add_item_crawling', (req,res) => {
   }); 
 });
 
-router.post('/add_items_direct', (req, res) => {
+router.post('/adddirect', (req, res) => {
   for (var i = 0; i < itemData.length; i++){
     console.log(i); 
     var add_item = new Item();
