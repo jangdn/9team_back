@@ -1,25 +1,9 @@
 const router = require('express').Router();
 const randomstring = require("randomstring");
 var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
 const cheerio = require('cheerio');
 const request = require('request');
 const Item = require('./model/model_items')
-
-/* size_table 예시
-const size_table ={
-    sizeHeader: ['95', '100', '105', '110'],
-      partSizeHeader: [
-        '가슴둘레', '목깊이', '목넓이', '밑단둘레', '소매길이', '소매밑단(카우스)', '소매중통', '소매통', '암홀(A.H)', '총기장'
-      ],
-      sizes: [
-        ['97', '8', '18.5', '87', '83.5', '19', '27', '34.5', '29', '68'],
-        ['102', '8.5', '19', '92', '85', '20', '28', '36', '30', '70'],
-        ['107', '9', '19.5', '97', '86.5', '21', '29', '37.5', '31', '72'],
-        ['113', '9.5', '20', '103', '88', '22', '30', '39', '32', '74'],
-      ]
-    }
-*/
 
 //1
 const itemData = [
@@ -277,34 +261,6 @@ const itemData = [
 },
 
 ]
-/*
-function totags(jsonobj){
-  //return new Promise(function(resolve, reject){
-    console.log(jsonobj);
-    var javaobj = JSON.parse(jsonobj);
-    console.log("2");
-    var tags = "";
-    tags += javaobj.brand;
-    delete javaobj[brand];
-    tags += javaobj.main_ctg;
-    delete javaobj[main_ctg];
-    tags += javaobj.sub_ctg;
-    delete javaobj[sub_ctg];
-    for(var i =0; i<javaobj.color.length; i++)
-      tags += javaobj.color[i];
-    
-    _.extend(javaobj, tags);
-    console.log(javaobj);
-    delete javaobj[color];
-
-    console.log(javaobj);
-    return JSON.stringify(javaobj);
-    //if(javaobj)
-      //resolve(JSON.stringify(javaobj));
-    //else
-      //reject(new Error("totags error"));
-  //});
-}*/
 
 router.get('/', (req, res) => {
   console.log(req.query.tags);
@@ -313,56 +269,12 @@ router.get('/', (req, res) => {
   // console.log(req.query);
   // console.log(req.params);
   // res.json(Object.keys(categories));
-  Item.find({tags : {$in:tags}},(err, items)=>{
+  Item.find({tags : {$all:tags}},(err, items)=>{
     if(err) return res.status(500).json({error: err});
     if(!items) return res.status(404).json({error: 'tag not define'});
     res.json(items);
   });
 });
-/*
-router.get('/', (req, res) => {
-  console.log(req.query.tags);
-  const tags = (req.query.tags).split(',');
-  console.log(tags);
-  // console.log(req.query);
-  // console.log(req.params);
-  // res.json(Object.keys(categories));
-  
-  //true를 만들기위한 사투.. : {$nin : [1]}
-  if(tags[0] == "all")
-    var brand_q = {"brand" : {$nin : [1]}};
-  else
-    var brand_q = {"brand" : tags[0]};
-  if(tags[1] == "all")
-    var main_q = {"main_ctg" : {$nin : [1]}};
-  else
-    var main_q = {"main_ctg" : tags[1]};
-  if(tags[2] == "all")
-    var sub_q = {"sub_ctg" : {$nin : [1]}};
-  e
-  lse
-    var sub_q = {"sub_ctg" : tags[2]};
-  var color_tags = tags.slice(3);
-  console.log(color_tags);
-  if(color_tags.length)
-    var color_q = {"color" : {$in:color_tags}};
-  else
-    var color_q = {"color" : {$nin : [1]}};
-
-  Item.find({$and:[brand_q, main_q,sub_q,color_q]},(err, items)=>{
-    if(err) return res.status(500).json({error: err});
-    if(!items) return res.status(404).json({error: 'tag not defined'});
-    res.json(items);
-  });
-  //여기 아래부분도 빼야됨
-  res.json(Object.values(itemData).filter(item => {
-    if(err) return res.status(500).json({error: err});
-    if(!item) return res.status(404).json({error: 'item not found'});
-    return tags.every(tag => item.tags.indexOf(tag) > -1);
-  }));
-  
-});
-*/
 
 //find는 아무런 인자로 넘겨줄게 없을때 function으로 함수를 선언해야한다.
 router.get('/all', (req, res) => {
@@ -453,15 +365,78 @@ router.get('/:itemId', (req, res) => {
   Item.findOne({itemId : itemId},(err, item)=>{
     if(err) return res.status(500).json({error: err});
     if(!item) return res.status(404).json({error: 'item not found'});
-    //console.log(item);
     res.json(item);
-    /*
-      totags(item)
-      .then((item)=>{res.json(item);})
-      .catch(err => console.log(err));
-    */
   });
 });
 
+router.put('/count/:itemId', (req, res) => {
+  const { itemId } = req.params;
+  console.log(itemId);
+  Item.findOne({itemId : itemId},(err, item)=>{
+    if(err) return res.status(500).json({error: 'database failure'});
+    if(!item) return res.status(404).json({error: 'item not found'});
+    item.count = item.count+1;
+    console.log(item.count);
+    item.save(function(err){
+      if(err) res.status(500).json({error: 'failed to count'});
+      res.json({"success" : 1});
+    });
+  });
+});
+
+
+router.put('/like/:itemId', (req, res) => {
+  const { itemId } = req.params;
+  console.log(itemId);
+  Item.findOne({itemId : itemId},(err, item)=>{
+    if(err) return res.status(500).json({error: 'database failure'});
+    if(!item) return res.status(404).json({error: 'item not found'});
+    item.like = item.like+1;
+    console.log(item.like);
+    item.save(function(err){
+      if(err) res.status(500).json({error: 'failed to like'});
+      res.json({"success" : 1});
+    });
+  });
+});
+
+
+router.get('/like/:itemId', (req, res) => {
+  const { itemId } = req.params;
+  console.log(itemId);
+  Item.findOne({itemId : itemId},(err, item)=>{
+    if(err) return res.status(500).json({error: 'database failure'});
+    if(!item) return res.status(404).json({error: 'item not found'});
+    console.log(item.like);
+    res.json(item.like);
+  });
+});
+
+router.put('/hate/:itemId', (req, res) => {
+  const { itemId } = req.params;
+  console.log(itemId);
+  Item.findOne({itemId : itemId},(err, item)=>{
+    if(err) return res.status(500).json({error: 'database failure'});
+    if(!item) return res.status(404).json({error: 'item not found'});
+    item.hate = item.hate+1;
+    console.log(item.hate);
+    item.save(function(err){
+      if(err) res.status(500).json({error: 'failed to hate'});
+      res.json({"success" : 1});
+    });
+  });
+});
+
+
+router.get('/hate/:itemId', (req, res) => {
+  const { itemId } = req.params;
+  console.log(itemId);
+  Item.findOne({itemId : itemId},(err, item)=>{
+    if(err) return res.status(500).json({error: 'database failure'});
+    if(!item) return res.status(404).json({error: 'item not found'});
+    console.log(item.hate);
+    res.json(item.hate);
+  });
+});
 
 module.exports = router;

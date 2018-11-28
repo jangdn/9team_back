@@ -1,20 +1,10 @@
 const router = require('express').Router();
 const randomstring = require("randomstring");
 var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
 const Item = require('./model/model_items')
 const User = require('./model/model_users')
 const Review = require('./model/model_reviews')
 
-/*
-    "reivewId": String,
-    "userId" : String,
-    "itemId" : String,
-    "public_date" : {type : Date, default : Date.now},
-    "title" : String,
-    "content" : String,
-    "up" : {type : Number, default : 0},
-*/
 const reviewData =[
     {
         "reviewId": randomstring.generate(10),
@@ -85,22 +75,35 @@ router.post('/adddirect', (req, res) => {
 });
 
 router.post('/users/:userID/items/:itemID', (req, res) => {
-    const { userId } = req.params;
-    const {itemId} = req.params;
+    const userId = req.params.userID;
+    const itemId = req.params.itemID;
     var add_review = new Review();
     add_review.reviewId = randomstring.generate(10);
     add_review.userId = userId;
     add_review.itemId = itemId;
-    add_review.title = req.body.title;
-    add_review.content = req.body.content;
-
-    console.log(add_review);
+    //add_review.content = req.body.content;
+    add_review.content = req.body.contents;
+    add_review.phy_attr = req.body.phyAttr;
+    
     add_review.save()
         .then(result => console.log(result))
         .catch(err => console.log(err));
+
     res.json({result:"review update"});
 });
-
+    /*
+    User.findOne({userId : userId})
+        .then((user) =>{
+            console.log(user);
+            add_review.phy_attr = user.phy_attr;
+            return add_review;
+        })
+        .then((add_review) =>{
+            add_review.save();
+            console.log(add_review);
+        })
+        .catch((err) => console.log(err));
+    */
 
 router.put('/up/:reviewId', (req, res) => {
     const { reviewId } = req.params;
@@ -125,11 +128,6 @@ router.get('/items/:itemId', (req, res) => {
       if(!review) return res.status(404).json({error: 'item not found'});
       //console.log(item);
       res.json(review);
-      /*
-        totags(item)
-        .then((item)=>{res.json(item);})
-        .catch(err => console.log(err));
-      */
     });
 });
 
@@ -141,11 +139,6 @@ router.get('/users/:userId', (req, res) => {
       if(!review) return res.status(404).json({error: 'item not found'});
       //console.log(item);
       res.json(review);
-      /*
-        totags(item)
-        .then((item)=>{res.json(item);})
-        .catch(err => console.log(err));
-      */
     });
   });
 
@@ -159,11 +152,15 @@ router.get('/today', (req, res) => {
         console.log(rand);
 
         res.json(review[rand]);
-        /*
-        totags(item)
-        .then((item)=>{res.json(item);})
-        .catch(err => console.log(err));
-        */
+    });
+});
+
+router.get('/recent', (req, res) => {
+    Review.sort({"public_date":-1},(err, reviews)=>{
+        if(err) return res.status(500).json({error: err});
+        if(!reviews) return res.status(404).json({error: 'review not found'});
+        //console.log(item);
+        res.json(reviews.slice(0,4));
     });
 });
 

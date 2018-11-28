@@ -13,6 +13,9 @@ var ItemSchema = new Schema({
     "brand" : String,
     "color" : Array,
     "tags" : Array,
+    "count" : {type : Number, default : 0},
+    "like" : {type : Number, default : 0},
+    "hate" : {type : Number, default : 0},
     /*col_size: {
       col_size: Array, 
       raw_size : Array,

@@ -3,7 +3,11 @@ const randomstring = require("randomstring");
 var mongoose = require('mongoose');
 const Item = require('./model/model_items')
 const User = require('./model/model_users')
-var Schema = mongoose.Schema;
+const passport = require('passport')
+
+const phyData = [
+    '좁은 어깨', '배가 나옴', '짧은 팔', '두꺼운 허벅지', '큰 골반', '큰 엉덩이', '두꺼운 종아리', '긴 다리', '큰 발 볼',
+];
 
 const userData =[
     {
@@ -38,6 +42,10 @@ const userData =[
         "wantItem" : ["dddddddddd"]
     },
 ]
+
+router.get('/phyData', (req, res) => {
+    res.json(phyData);
+});
 
 router.get('/', (req, res) => {
     console.log(req.query.tags);
@@ -97,6 +105,7 @@ router.put('/:userId/favorites/:itemId', (req, res) => {
     });
 });
 
+/*
 router.post('/:userId', (req, res) => {
     const { userId } = req.params;
     var update_data = ["xAuLbL7tSa"];
@@ -115,5 +124,7 @@ router.post('/:userId', (req, res) => {
         });
     });
 });
+*/
+
 
 module.exports = router;
