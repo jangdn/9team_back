@@ -1,9 +1,12 @@
 const router = require('express').Router();
 const randomstring = require("randomstring");
 var mongoose = require('mongoose');
+var session = require('express-session');
+var cookieSession = require('cookie-session');
+
+var passport = require('passport');
 const Item = require('./model/model_items')
 const User = require('./model/model_users')
-const passport = require('passport')
 
 const phyData = [
     '좁은 어깨', '배가 나옴', '짧은 팔', '두꺼운 허벅지', '큰 골반', '큰 엉덩이', '두꺼운 종아리', '긴 다리', '큰 발 볼',
@@ -11,34 +14,34 @@ const phyData = [
 
 const userData =[
     {
-        "userId" : "aaaaaaaaaa",
         "birth" : "930409",
         "email" : "jangdn@naver.com",
-        "phy_attr" : ["다리 긺", "팔 긺", "허벅지 두꺼움", "안경"],
+        "phy_attr" : ["좁은 어깨"],
+        "password" : "akdntm90",
         "wantItem" : ["eeeeeeeeee"]
     },
 
     {
-        "userId" : "bbbbbbbbbb",
         "birth" : "940510",
         "email" : "jangd@naver.com",
-        "phy_attr" : ["다리 짧음", "팔 짧음"],
+        "phy_attr" : ["긴 다리", "큰 발 볼"],
+        "password" : "akdntm90",
         "wantItem" : ["eeeeeeeeee"]
     },
 
     {
-        "userId" : randomstring.generate(10),
         "birth" : "950611",
         "email" : "jag@naver.com",
-        "phy_attr" : ["종아리 두꺼움", "어깨 넓음",],
+        "phy_attr" : ["두꺼운 허벅지", "큰 골반",],
+        "password" : "akdntm90",
         "wantItem" : ["eeeeeeeeee", "dddddddddd"]
     },
     
     {
-        "userId" : randomstring.generate(10),
         "birth" : "960712",
         "email" : "jagn@naver.com",
-        "phy_attr" : ["어깨 좁음", "팔 긺",],
+        "phy_attr" : ["두꺼운 종아리", "긴 다리",],
+        "password" : "akdntm90",
         "wantItem" : ["dddddddddd"]
     },
 ]
@@ -74,6 +77,7 @@ router.post('/adddirect', (req, res) => {
         add_user.userId = userData[i].userId;
         add_user.birth = userData[i].birth;
         add_user.email = userData[i].email;
+        add_user.password = userData[i].password;
         add_user.phy_attr = userData[i].phy_attr;
         add_user.wantItem = userData[i].wantItem;
 
@@ -85,6 +89,35 @@ router.post('/adddirect', (req, res) => {
     res.json({result:"user update"});
 });
 
+router.get('/call', function(req, res) {
+    // deserializeUser에서 추가로 저장한 정보까지 전달 받음
+    console.log(req.user);
+    return res.json(req.user);
+});
+//req.session.passport.user => id
+
+router.get('/phyAttr', function(req, res) {
+    // deserializeUser에서 추가로 저장한 정보까지 전달 받음
+    console.log(req.user);
+    return res.json(req.user.phy_attr);
+});
+
+router.put('/phyAttr', function(req, res) {
+    // deserializeUser에서 추가로 저장한 정보까지 전달 받음
+    User.findOne({email : req.user.email},(err, user) => {
+        console.log(user);
+        if(err) return res.status(500).json({ error: 'database failure' });
+        if(!user) return res.status(404).json({ error: 'user not found' });
+        //ITEM
+        
+        user.phy_attr = req.body.phyAttr;
+        console.log(user.phy_attr);
+        user.save(function(err){
+            if(err) res.status(500).json({error: 'failed to update'});
+            res.status(200).json({message: 'user phy updated'});
+        });
+    });
+});
 
 //userId 생기면 바꿔야할 부분
 router.put('/:userId/favorites/:itemId', (req, res) => {
