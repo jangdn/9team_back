@@ -152,7 +152,7 @@ app.post('/api/signup', (req,res) => {
     
     console.log(add_user);
     add_user.save()
-      .then(result => console.log(result))
+      .then(result => res.status(200).json({ succcess: true }))
       .catch(err => console.log(err));
     });
 });
