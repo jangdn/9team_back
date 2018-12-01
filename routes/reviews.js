@@ -1,6 +1,5 @@
 const router = require('express').Router();
 const randomstring = require("randomstring");
-var mongoose = require('mongoose');
 const Item = require('./model/model_items')
 const User = require('./model/model_users')
 const Review = require('./model/model_reviews')
@@ -84,7 +83,36 @@ router.post('/items/:itemId', (req, res) => {
         .catch(err => res.status(400).json({message : "post fail"}));
     
 });
-    /*
+   
+
+router.put('/:reviewId', (req, res) => {
+    const reviewId = req.params.reviewId;
+    Review.findOne({reviewId : reviewId},(err, review)=>{
+        if(err) return res.status(500).json({error: 'database failure'});
+        if(!review) return res.status(404).json({error: 'review not found'});
+        if(req.body.contents)
+            review.content = req.body.contents;
+        if(req.body.phyAttr)
+            review.phy_attr = req.body.phyAttr;
+
+        review.save(function(err){
+          if(err) res.status(500).json({error: 'failed to review update'});
+          res.status(200).json({"success" : true});
+        });
+      });
+});
+
+
+router.delete('/:reviewId', (req, res) => {
+    const reviewId = req.params.reviewId;
+    Review.remove({reviewId : reviewId},(err, output)=>{
+        if(err) return res.status(500).json({error: 'database failure'});
+        console.log(output);
+        if(!output.n) return res.status(404).json({error: 'review not found'});
+        res.status(200).json({"success" : true});
+    });
+});
+/*
     User.findOne({email : email})
         .then((user) =>{
             console.log(user);
@@ -107,8 +135,8 @@ router.put('/up/:reviewId', (req, res) => {
         review.up = review.up+1;
         console.log(review.up);
         review.save(function(err){
-            if(err) res.status(500).json({error: 'failed to up'});
-            res.json({message: 'review up!'});
+            if(err) return res.status(400).json({error: 'failed to up'});
+            res.status(200).json({success : true});
         });
     });
 });
@@ -124,12 +152,11 @@ router.get('/items/:itemId', (req, res) => {
     });
 });
 
-router.get('/users/:userId', (req, res) => {
-    const { userId } = req.params;
-    console.log(userId);
-    Review.find({userId : userId},(err, review)=>{
+
+router.get('/users', (req, res) => {
+    Review.find({email : req.user.email},(err, review)=>{
       if(err) return res.status(500).json({error: err});
-      if(!review) return res.status(404).json({error: 'item not found'});
+      if(!review) return res.status(404).json({error: 'review not found'});
       //console.log(item);
       res.json(review);
     });

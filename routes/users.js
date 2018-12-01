@@ -1,8 +1,5 @@
 const router = require('express').Router();
 const randomstring = require("randomstring");
-var mongoose = require('mongoose');
-var session = require('express-session');
-var cookieSession = require('cookie-session');
 
 var passport = require('passport');
 const Item = require('./model/model_items')
@@ -50,6 +47,27 @@ router.get('/phyData', (req, res) => {
     res.json(phyData);
 });
 
+router.get('/favorites', (req, res) => {
+    // console.log(req.query);
+    // console.log(req.params);
+    // res.json(Object.keys(categories));
+    User.findOne({email : req.user.email})
+        .then((user) => {
+            return Item.find({'itemId':{$in: user.wantItem}});
+        })
+        .then((result) => {res.json(result)})
+        .catch((err) => {
+            res.status(400).json(err);
+        });
+
+    // User.find({email : req.user.email},(err, items)=>{
+    //   if(err) return res.status(500).json({error: err});
+    //   if(!items) return res.status(404).json({error: 'favorite items is not found'});
+    //   res.json(items);
+    // });
+  });
+
+
 router.get('/', (req, res) => {
     console.log(req.query.tags);
     const tags = (req.query.tags).split(',');
@@ -74,7 +92,6 @@ router.post('/adddirect', (req, res) => {
     for (var i = 0; i < userData.length; i++){
         console.log(i); 
         var add_user = new User();
-        add_user.userId = userData[i].userId;
         add_user.birth = userData[i].birth;
         add_user.email = userData[i].email;
         add_user.password = userData[i].password;
@@ -120,20 +137,17 @@ router.put('/phyAttr', function(req, res) {
 });
 
 //userId 생기면 바꿔야할 부분
-router.put('/:userId/favorites/:itemId', (req, res) => {
-    const { userId } = req.params;
+router.put('/favorites/:itemId', (req, res) => {
     const { itemId } = req.params;
-    console.log(userId, itemId);
-    User.findOne({userId : userId},(err, user) => {
-        console.log(user);
+    User.find({$and:[{email : req.user.email},{wantItem : {$ne : itemId}}]},(err, user) => {
         if(err) return res.status(500).json({ error: 'database failure' });
-        if(!user) return res.status(404).json({ error: 'user not found' });
+        if(!user[0]) return res.status(404).json({ error: 'already enrolled' });
         //ITEM
-        user.wantItem.push(itemId);
-        console.log(user.wantItem);
-        user.save(function(err){
+        user[0].wantItem.push(itemId);
+        console.log(user[0].wantItem);
+        user[0].save(function(err){
             if(err) res.status(500).json({error: 'failed to update'});
-            res.status(200).json({message: 'user want updated'});
+            res.status(200).json({success : true});
         });
     });
 });
