@@ -3,10 +3,9 @@ var Schema = mongoose.Schema;
 
 var ReviewSchema = new Schema({
     "reviewId": String,
-    "userId" : String,
+    "email" : String,
     "itemId" : String,
     "public_date" : {type : Date, default : Date.now},
-    "title" : String,
     "content" : String,
     "up" : {type : Number, default : 0},
     "phy_attr" : Array,

@@ -8,7 +8,7 @@ const Review = require('./model/model_reviews')
 const reviewData =[
     {
         "reviewId": randomstring.generate(10),
-        "userId" : "aaaaaaaaaa",
+        "email" : "jangdn@a",
         "itemId" : "dddddddddd",
         "title" : "정말 잘 맞아요!!",
         "content" : "이 옷은 제 신체 특성에 잘 맞는 옷이에요!",
@@ -16,40 +16,35 @@ const reviewData =[
 
     {
         "reviewId": randomstring.generate(10),
-        "userId" : "aaaaaaaaaa",
+        "email" : "jangdn@a",
         "itemId" : "dddddddddd",
-        "title" : "정말 별로에요",
         "content" : "이 옷은 제 신체 특성에 하나도 맞지 않아서 잘 보시고 선택하셨으면 좋겠어요",
     },
     {
         "reviewId": randomstring.generate(10),
-        "userId" : "aaaaaaaaaa",
+        "email" : "jangdn@a",
         "itemId" : "eeeeeeeeee",
-        "title" : "이뻐요",
         "content" : "귀찮아요",
     },
     {
         "reviewId": randomstring.generate(10),
-        "userId" : "bbbbbbbbbb",
+        "email" : "jangdn@naver.com",
         "itemId" : "dddddddddd",
-        "title" : "님들은 잘 맞아요?",
         "content" : "왜 나만 안 맞지;;",
     },
     
     {
         "reviewId": randomstring.generate(10),
-        "userId" : "aaaaaaaaaa",
+        "email" : "jangdn@naver.com",
         "itemId" : "dddddddddd",
-        "title" : "짱이에요!!",
         "content" : "오오오오",
         "up" : 101,
     },
     
     {
         "reviewId": randomstring.generate(10),
-        "userId" : "eeeeeeeeee",
+        "email" : "jangdn@naver.com",
         "itemId" : "dddddddddd",
-        "title" : "실은 잘 맞아요",
         "content" : "이제보니 잘 맞네",
         "up" : 200,
     },
@@ -60,9 +55,8 @@ router.post('/adddirect', (req, res) => {
         console.log(i); 
         var add_review = new Review();
         add_review.reviewId = reviewData[i].reviewId;
-        add_review.userId = reviewData[i].userId;
+        add_review.email = reviewData[i].email;
         add_review.itemId = reviewData[i].itemId;
-        add_review.title = reviewData[i].title;
         add_review.content = reviewData[i].content;
         add_review.up = reviewData[i].up;
 
@@ -74,25 +68,24 @@ router.post('/adddirect', (req, res) => {
     res.json({result:"review update"});
 });
 
-router.post('/users/:userID/items/:itemID', (req, res) => {
-    const userId = req.params.userID;
-    const itemId = req.params.itemID;
+router.post('/items/:itemId', (req, res) => {
+    const email = req.user.email;
+    const itemId = req.params.itemId;
     var add_review = new Review();
     add_review.reviewId = randomstring.generate(10);
-    add_review.userId = userId;
+    add_review.email = email;
     add_review.itemId = itemId;
     //add_review.content = req.body.content;
     add_review.content = req.body.contents;
     add_review.phy_attr = req.body.phyAttr;
     
     add_review.save()
-        .then(result => console.log(result))
-        .catch(err => console.log(err));
-
-    res.json({result:"review update"});
+        .then(result => res.status(200).json({success : true}))
+        .catch(err => res.status(400).json({message : "post fail"}));
+    
 });
     /*
-    User.findOne({userId : userId})
+    User.findOne({email : email})
         .then((user) =>{
             console.log(user);
             add_review.phy_attr = user.phy_attr;
