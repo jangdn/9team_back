@@ -25,10 +25,6 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-app.use(express.static('public'));
-app.use(history())
-app.use(express.static('public'));
-
 /*
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
@@ -166,6 +162,11 @@ app.use('/api/categories', categories);
 app.use('/api/items', items);
 app.use('/api/users', users);
 app.use('/api/reviews', reviews);
+
+
+app.use(express.static('public'));
+app.use(history())
+app.use(express.static('public'));
 
 const server = http.createServer(app);
 server.listen(PORT);
