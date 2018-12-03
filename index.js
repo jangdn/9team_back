@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const http = require('http');
 const logger = require('morgan');
+const history = require('connect-history-api-fallback');
 const categories = require('./routes/categories')
 const items = require('./routes/items')
 const users = require('./routes/users')
@@ -16,13 +17,17 @@ var LocalStrategy = require('passport-local').Strategy
 var User = require('./routes/model/model_users');
 
 const app = express();
-const PORT = 8080;
+const PORT = 80;
 
 app.set('port', PORT);
 app.use(cors());
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+
+app.use(express.static('public'));
+app.use(history())
+app.use(express.static('public'));
 
 /*
 app.set('views', __dirname + '/views');
