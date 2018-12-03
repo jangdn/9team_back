@@ -49,7 +49,7 @@ db.once('open', function(){
     console.log("Connected to mongodb server");
 });
 
-mongoose.connect('mongodb://localhost/SEdb');
+mongoose.connect('mongodb://otjalan.ml/SEdb');
 
 // var store = new MongoDBStore({
 //   url: 'mongodb://localhost/SEdb',

@@ -131,7 +131,7 @@ router.put('/phyAttr', function(req, res) {
         console.log(user.phy_attr);
         user.save(function(err){
             if(err) res.status(500).json({error: 'failed to update'});
-            res.status(200).json({message: 'user phy updated'});
+            res.status(200).json({success : true});
         });
     });
 });
