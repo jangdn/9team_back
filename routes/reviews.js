@@ -4,6 +4,7 @@ const Item = require('./model/model_items')
 const User = require('./model/model_users')
 const Review = require('./model/model_reviews')
 
+
 const reviewData =[
     {
         "reviewId": randomstring.generate(10),
@@ -96,10 +97,10 @@ router.put('/:reviewId', (req, res) => {
             review.phy_attr = req.body.phyAttr;
 
         review.save(function(err){
-          if(err) res.status(500).json({error: 'failed to review update'});
-          res.status(200).json({"success" : true});
+            if(err) res.status(500).json({error: 'failed to review update'});
+            res.status(200).json({"success" : true});
         });
-      });
+    });
 });
 
 
@@ -176,11 +177,11 @@ router.get('/today', (req, res) => {
 });
 
 router.get('/recent', (req, res) => {
-    Review.sort({"public_date":-1},(err, reviews)=>{
+    Review.find((err, reviews)=>{
         if(err) return res.status(500).json({error: err});
         if(!reviews) return res.status(404).json({error: 'review not found'});
         //console.log(item);
-        res.json(reviews.slice(0,4));
+        res.json(reviews.sort({"public_date":-1}).slice(0,4));
     });
 });
 
