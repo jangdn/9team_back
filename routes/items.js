@@ -286,6 +286,13 @@ router.get('/all', (req, res) => {
   });
 });
 
+router.get('/recommandation', (req, res) => {
+  Item.find(function(err, items){
+    if(err) return res.status(500).json({error: err});
+    if(!items) return res.status(404).json({error: 'item not found'});
+    res.json(items.sort({"public_date":-1}).slice(0,4));
+  });
+});
 
 
 //크롤링 적용
