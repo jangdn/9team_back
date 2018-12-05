@@ -94,6 +94,14 @@ app.get('/api/session', ensureAuthenticated, function(req, res) {
   return res.json(req.user);
 });
 
+app.get('/api/login', ensureAuthenticated, function(req, res) {
+  // deserializeUser에서 추가로 저장한 정보까지 전달 받음
+  if(req.user)
+    return res.status(200).json({succecs : true});
+  else
+    return res.status(400).json({message:"not login"});
+});
+
 function ensureAuthenticated(req, res, next) {
   if (req.isAuthenticated()) { // 현재 session이 유효한 세션인가?
       // 유효 하므로 다음으로

@@ -261,10 +261,10 @@ const itemData = [
 },
 
 ]
-
+/*
 router.get('/', (req, res) => {
   console.log(req.query.tags);
-  const tags = (req.query.tags).split(',');
+  const { tags } = (req.query.tags).split(',');
   console.log(tags);
   // console.log(req.query);
   // console.log(req.params);
@@ -275,6 +275,25 @@ router.get('/', (req, res) => {
     res.json(items);
   });
 });
+*/
+        
+router.get('/', (req, res) => {
+  console.log(req.query.tags);
+  const tags = (req.query.tags).split(',');
+  
+  const offset = Number(req.query.offset) || 0;
+  const limit = Number(req.query.limit) || 20;
+  console.log(tags, offset, limit);
+  Item.find({tags : {$all:tags}}).skip(offset).limit(limit)
+    .then((items) =>{
+      res.json(items);
+    })
+    .catch((err) => {
+      res.status(400).json(err);
+    });
+  
+});
+
 
 //find는 아무런 인자로 넘겨줄게 없을때 function으로 함수를 선언해야한다.
 router.get('/all', (req, res) => {
@@ -287,12 +306,30 @@ router.get('/all', (req, res) => {
 });
 
 router.get('/recommandation', (req, res) => {
-  Item.find(function(err, items){
-    if(err) return res.status(500).json({error: err});
-    if(!items) return res.status(404).json({error: 'item not found'});
-    res.json(items.sort({"public_date":-1}).slice(0,4));
-  });
+  const recommandation_arr = ['재킷','점퍼','다운','코트','가죽'];
+  //var tags = Array;
+  var tags = (recommandation_arr[(Math.floor(Math.random() * 10) + 1) % 5]);
+  
+  const offset = Number(req.query.offset) || 0;
+  const limit = Number(req.query.limit) || 20;
+  console.log(tags, offset, limit);
+  Item.find({tags : {$all:tags}}).skip(offset).limit(limit)
+    .then((items) =>{
+      res.json(items);
+    })
+    .catch((err) => {
+      res.status(400).json(err);
+    });
+  
 });
+
+// router.get('/recommandation', (req, res) => {
+//   Item.find(function(err, items){
+//     if(err) return res.status(500).json({error: err});
+//     if(!items) return res.status(404).json({error: 'item not found'});
+//     res.json(items.sort({"public_date":-1}).slice(0,4));
+//   });
+// });
 
 
 //크롤링 적용
