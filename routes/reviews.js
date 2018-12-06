@@ -94,7 +94,7 @@ router.post('/items/:itemId', (req, res) => {
             add_review.height = req.body.height;
             add_review.weight = req.body.weight;
             add_review.content = req.body.contents;
-            add_review.phy_attr = req.body.phyAttr;
+            add_review.phyAttr = req.body.phyAttr;
             add_review.rating = req.body.rating; 
             add_review.save()
             .catch(err => res.status(400).json({message : "post fail"}));
@@ -102,7 +102,7 @@ router.post('/items/:itemId', (req, res) => {
             
             User.findOne({email : email})
             .then(user =>{
-                user.phy_attr = req.body.phyAttr;
+                user.phyAttr = req.body.phyAttr;
                 user.weight = req.body.weight;
                 user.height = req.body.height;
                 user.save();
@@ -129,7 +129,7 @@ router.post('/items/:itemId', (req, res) => {
         else   
         {
             review.content = req.body.contents;
-            review.phy_attr = req.body.phyAttr;
+            review.phyAttr = req.body.phyAttr;
             review.weight = req.body.weight;
             review.height = req.body.height;
             var beforerating = review.rating;
@@ -139,7 +139,7 @@ router.post('/items/:itemId', (req, res) => {
             
             User.findOne({email : email})
             .then(user =>{
-                user.phy_attr = req.body.phyAttr;
+                user.phyAttr = req.body.phyAttr;
                 user.weight = req.body.weight;
                 user.height = req.body.height;
                 user.save();
@@ -175,7 +175,7 @@ router.put('/:reviewId', (req, res) => {
         if(req.body.contents)
             review.content = req.body.contents;
         if(req.body.phyAttr)
-            review.phy_attr = req.body.phyAttr;
+            review.phyAttr = req.body.phyAttr;
         if(req.body.rating)
             review.rating = req.body.rating;
 
@@ -231,13 +231,13 @@ router.get('/users', (req, res) => {
       //console.log(item);
       res.json(review);
     });
-  });
+});
 
 /*
     User.findOne({email : email})
         .then((user) =>{
             console.log(user);
-            add_review.phy_attr = user.phy_attr;
+            add_review.phyAttr = user.phyAttr;
             return add_review;
         })
         .then((add_review) =>{

@@ -12,7 +12,7 @@ var ReviewSchema = new Schema({
     "height" : String,
 
     "rating" : {type : Number, default : 0},
-    "phy_attr" : Array,
+    "phyAttr" : Array,
     "up" : {type : Number, default : 0},
 });
 
