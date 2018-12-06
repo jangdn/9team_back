@@ -249,7 +249,7 @@ router.get('/users', (req, res) => {
 
 
 router.get('/today', (req, res) => {
-    Item.find({"count" : {$gte:10},"rating" : {$gte:3.5}},{"itemId" : true})
+    Item.find({"count" : {$gte:3},"rating" : {$gte:2.5}},{"itemId" : true})
     .then(items =>{
         var rand = Math.floor(Math.random() * items.length);
         //var randomItem = randomItem(items);

@@ -318,7 +318,7 @@ router.get('/all', (req, res) => {
 });
 
 router.get('/recommandation', (req, res) => {
-  const recommandation_arr = ['재킷','점퍼','다운','코트','가죽'];
+  const recommandation_arr = ['재킷','점퍼','유니클로','슬렉스'];
   //var tags = Array;
   var tags = (recommandation_arr[(Math.floor(Math.random() * 10) + 1) % 5]);
   
