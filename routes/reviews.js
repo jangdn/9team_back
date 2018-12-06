@@ -78,18 +78,90 @@ User.findOne({email : req.user.email})
 
 router.post('/items/:itemId', (req, res) => {
     const email = req.user.email;
+    const nickname = req.user.nickname;
     const itemId = req.params.itemId;
-    var add_review = new Review();
-    add_review.reviewId = randomstring.generate(10);
-    add_review.email = email;
-    add_review.itemId = itemId;
-    //add_review.content = req.body.content;
-    add_review.content = req.body.contents;
-    add_review.phy_attr = req.body.phyAttr;
-    add_review.rating = req.body.rating; 
-    add_review.save()
-        .then(result => res.status(200).json({success : true}))
-        .catch(err => res.status(400).json({message : "post fail"}));
+    
+    Review.findOne({itemId : itemId, email : email},(err, review) =>{
+        if(!review)
+        {
+            var add_review = new Review();
+            add_review.reviewId = randomstring.generate(10);
+            add_review.email = email;
+            add_review.nickname = nickname;
+            add_review.itemId = itemId;
+            //add_review.content = req.body.content;
+            add_review.height = req.body.height;
+            add_review.weight = req.body.weight;
+            add_review.content = req.body.contents;
+            add_review.phy_attr = req.body.phyAttr;
+            add_review.rating = req.body.rating; 
+            add_review.save()
+            .catch(err => res.status(400).json({message : "post fail"}));
+           
+            
+            User.findOne({email : email})
+            .then(user =>{
+                user.phy_attr = req.body.phyAttr;
+                user.weight = req.body.weight;
+                user.height = req.body.height;
+                user.save();
+            })
+            .catch(err => res.status(400).json({message : "post fail"}))
+
+            Item.findOne({itemId : itemId})
+            .then(item =>{
+                if(!item.rating)
+                    item.rating = 0;
+                var itemRating = item.rating;
+                var itemCount = item.count;
+                itemRating *= itemCount;
+                itemRating += add_review.rating;
+                itemCount += 1;
+                item.rating = itemRating/itemCount;
+                item.count = itemCount;
+                console.log(item);
+                item.save();
+            })
+            .then(result => res.status(200).json({success : true}))
+            .catch(err => res.status(400).json({message : "post fail"}));
+        }
+        else   
+        {
+            review.content = req.body.contents;
+            review.phy_attr = req.body.phyAttr;
+            review.weight = req.body.weight;
+            review.height = req.body.height;
+            var beforerating = review.rating;
+            review.rating = req.body.rating;
+            review.save()
+            .catch(err => res.status(400).json({message : "post fail"}));
+            
+            User.findOne({email : email})
+            .then(user =>{
+                user.phy_attr = req.body.phyAttr;
+                user.weight = req.body.weight;
+                user.height = req.body.height;
+                user.save();
+            })
+            .catch(err => res.status(400).json({message : "post fail"}))
+
+            Item.findOne({itemId : itemId})
+            .then(item =>{
+                if(!item.rating)
+                    item.rating = 0;
+                var itemRating = item.rating;
+                var itemCount = item.count;
+                itemRating *= itemCount;
+                itemRating -= beforerating;
+                itemRating += review.rating;
+                item.rating = itemRating/itemCount;
+                console.log(item);
+                item.save();
+            })
+            .then(result => res.status(200).json({success : true}))
+            .catch(err => res.status(400).json({message : "post fail"}));
+        }
+    })
     
 });
    
