@@ -17,6 +17,9 @@ const itemData = [
   sub_ctg : "코트",
   brand : "키작남",
   color : ["베이지", "그레이", "블랙"],
+  
+  count : 200,
+  rating : 4.5,
 },
 //2
 {
@@ -29,6 +32,9 @@ const itemData = [
   sub_ctg : "팬츠",
   brand : "키작남",
   color : ["베이지","그레이","브라운","블랙","크림","차콜","네이비"],
+  
+  count : 100,
+  rating : 2,
 },
 //3
 {
@@ -197,6 +203,9 @@ const itemData = [
   sub_ctg : "데님",
   brand : "페이탈리즘",
   color : ["블랙"],
+  
+  count : 200,
+  rating : 5,
 },
 //17
 /*
@@ -221,6 +230,8 @@ const itemData = [
   sub_ctg : "셔츠",
   brand : "다이아몬드레이라",
   color : ["네이비"],
+  count : 100,
+  rating : 4,
 },
 //19
 /*

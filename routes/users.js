@@ -43,6 +43,8 @@ const userData =[
     },
 ]
 
+
+
 router.get('/phyData', (req, res) => {
     res.json(phyData);
 });
@@ -67,20 +69,43 @@ router.get('/favorites', (req, res) => {
     // });
   });
 
+router.delete('/favorites/:itemId', (req, res) => {
+    const itemId = req.params;
+    User.findOne({email : req.user.email},(err, user)=>{
+        user.wantItem.splice(user.wantItem.indexOf(itemId),1);
+        user.save()
+            .then(result => res.status(200).json({"success" : true}))
+            .catch(err => res.status(404).json(err));
+    });
+});
+
 
 router.get('/', (req, res) => {
-    console.log(req.query.tags);
-    const tags = (req.query.tags).split(',');
-    console.log(tags);
+    const email = req.user.email;
+    const nickname = req.user.nickname;
+    const password = req.user.password;
     // console.log(req.query);
     // console.log(req.params);
     // res.json(Object.keys(categories));
-    Item.find({tags : {$in:tags}},(err, items)=>{
-      if(err) return res.status(500).json({error: err});
-      if(!items) return res.status(404).json({error: 'tag not define'});
-      res.json(items);
+    return res.json({email, nickname, password});
+});
+
+router.put('/', (req, res) => {
+    User.findOne({email : req.user.email},(err, user) => {
+        console.log(user);
+        if(err) return res.status(500).json({ error: 'database failure' });
+        if(!user) return res.status(404).json({ error: 'user not found' });
+        //ITEM
+        if(req.body.email)
+            user.email = req.body.email;        
+        if(req.body.password)
+            user.password = req.body.password;
+        user.save(function(err){
+            if(err) res.status(500).json({error: 'failed to update'});
+            res.status(200).json({success : true});
+        });
     });
-  });
+});
   /*
   "userId": String,
   "birth" : String,
@@ -100,8 +125,8 @@ router.post('/adddirect', (req, res) => {
 
         console.log(add_user);
         add_user.save()
-        .then(result => console.log(result))
-        .catch(err => console.log(err));
+            .then(result => console.log(result))
+            .catch(err => console.log(err));
     };
     res.json({result:"user update"});
 });
@@ -152,26 +177,6 @@ router.put('/favorites/:itemId', (req, res) => {
     });
 });
 
-/*
-router.post('/:userId', (req, res) => {
-    const { userId } = req.params;
-    var update_data = ["xAuLbL7tSa"];
-    //data 처리부분 수정해야함
-    //var update_data = req.body.update_data;
-    User.findOne({userId : userId},(err, user) => {
-        console.log(user);
-        if(err) return res.status(500).json({ error: 'database failure' });
-        if(!user) return res.status(404).json({ error: 'user not found' });
-        user.userId = userId;
-        user.wantItem = update_data;
-        console.log(user.wantItem);
-        user.save(function(err){
-            if(err) res.status(500).json({error: 'failed to update'});
-            res.json({message: 'user want updated'});
-        });
-    });
-});
-*/
 
 
 module.exports = router;

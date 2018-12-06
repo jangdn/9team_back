@@ -10,7 +10,6 @@ const reviewData =[
         "reviewId": randomstring.generate(10),
         "email" : "jangdn@a",
         "itemId" : "dddddddddd",
-        "title" : "정말 잘 맞아요!!",
         "content" : "이 옷은 제 신체 특성에 잘 맞는 옷이에요!",
     },
 
@@ -38,7 +37,6 @@ const reviewData =[
         "email" : "jangdn@naver.com",
         "itemId" : "dddddddddd",
         "content" : "오오오오",
-        "up" : 101,
     },
     
     {
@@ -46,7 +44,6 @@ const reviewData =[
         "email" : "jangdn@naver.com",
         "itemId" : "dddddddddd",
         "content" : "이제보니 잘 맞네",
-        "up" : 200,
     },
 ]
 
@@ -58,15 +55,26 @@ router.post('/adddirect', (req, res) => {
         add_review.email = reviewData[i].email;
         add_review.itemId = reviewData[i].itemId;
         add_review.content = reviewData[i].content;
-        add_review.up = reviewData[i].up;
 
         console.log(add_review);
         add_review.save()
             .then(result => console.log(result))
             .catch(err => console.log(err));
+            
     };
     res.json({result:"review update"});
 });
+/*
+User.findOne({email : req.user.email})
+    .then((user) => {
+        return Item.find({'itemId':{$in: user.wantItem}});
+    })
+    .then((result) => {res.json(result)})
+    .catch((err) => {
+        res.status(400).json(err);
+    });
+
+*/
 
 router.post('/items/:itemId', (req, res) => {
     const email = req.user.email;
@@ -78,7 +86,7 @@ router.post('/items/:itemId', (req, res) => {
     //add_review.content = req.body.content;
     add_review.content = req.body.contents;
     add_review.phy_attr = req.body.phyAttr;
-    
+    add_review.rating = req.body.rating; 
     add_review.save()
         .then(result => res.status(200).json({success : true}))
         .catch(err => res.status(400).json({message : "post fail"}));
@@ -95,6 +103,8 @@ router.put('/:reviewId', (req, res) => {
             review.content = req.body.contents;
         if(req.body.phyAttr)
             review.phy_attr = req.body.phyAttr;
+        if(req.body.rating)
+            review.rating = req.body.rating;
 
         review.save(function(err){
             if(err) res.status(500).json({error: 'failed to review update'});
@@ -113,19 +123,6 @@ router.delete('/:reviewId', (req, res) => {
         res.status(200).json({"success" : true});
     });
 });
-/*
-    User.findOne({email : email})
-        .then((user) =>{
-            console.log(user);
-            add_review.phy_attr = user.phy_attr;
-            return add_review;
-        })
-        .then((add_review) =>{
-            add_review.save();
-            console.log(add_review);
-        })
-        .catch((err) => console.log(err));
-    */
 
 router.put('/up/:reviewId', (req, res) => {
     const { reviewId } = req.params;
@@ -162,6 +159,21 @@ router.get('/users', (req, res) => {
       res.json(review);
     });
   });
+
+/*
+    User.findOne({email : email})
+        .then((user) =>{
+            console.log(user);
+            add_review.phy_attr = user.phy_attr;
+            return add_review;
+        })
+        .then((add_review) =>{
+            add_review.save();
+            console.log(add_review);
+        })
+        .catch((err) => console.log(err));
+    */
+
 
 router.get('/today', (req, res) => {
     Review.find({"up":{$gte:100}},(err, review)=>{
