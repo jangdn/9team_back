@@ -3,6 +3,7 @@ const randomstring = require("randomstring");
 const Item = require('./model/model_items')
 const User = require('./model/model_users')
 const Review = require('./model/model_reviews')
+const randomItem = require('random-item')
 
 
 const reviewData =[
@@ -248,16 +249,18 @@ router.get('/users', (req, res) => {
 
 
 router.get('/today', (req, res) => {
-    Review.find({"up":{$gte:100}},(err, review)=>{
-        if(err) return res.status(500).json({error: err});
-        if(!review) return res.status(404).json({error: 'review not found'});
-        //console.log(item);
-        console.log(review.length);
-        var rand = Math.floor((Math.random() * review.length));
-        console.log(rand);
-
-        res.json(review[rand]);
-    });
+    Item.find({"count" : {$gte:10},"rating" : {$gte:3.5}},{"itemId" : true})
+    .then(items =>{
+        var rand = Math.floor(Math.random() * items.length);
+        //var randomItem = randomItem(items);
+        console.log(items[rand].itemId);
+        var randItem = items[rand].itemId;
+        return Review.findOne({itemId : randItem});
+    })
+    .then((review) =>{
+        res.json(review);
+    })
+    .catch(err => res.status(400).json(err));
 });
 
 router.get('/recent', (req, res) => {

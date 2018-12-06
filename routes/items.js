@@ -272,6 +272,7 @@ const itemData = [
 },
 
 ]
+
 /*
 router.get('/', (req, res) => {
   console.log(req.query.tags);
@@ -426,14 +427,13 @@ router.get('/:itemId', (req, res) => {
 
 
 
-router.put('/like/:itemId', (req, res) => {
+router.put('/count/:itemId', (req, res) => {
   const { itemId } = req.params;
   console.log(itemId);
   Item.findOne({itemId : itemId},(err, item)=>{
     if(err) return res.status(500).json({error: 'database failure'});
     if(!item) return res.status(404).json({error: 'item not found'});
-    item.like = item.like+1;
-    console.log(item.like);
+    item.count = item.count+1;
     item.save(function(err){
       if(err) res.status(500).json({error: 'failed to like'});
       res.status(200).json({"success" : true});
