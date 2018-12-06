@@ -7,6 +7,8 @@ const categories = require('./routes/categories')
 const items = require('./routes/items')
 const users = require('./routes/users')
 const reviews = require('./routes/reviews')
+const randomItem = require('random-item')
+
 //const passportConfig = require('./config/passport');
 var passport = require('passport');
 var helmet = require('helmet');

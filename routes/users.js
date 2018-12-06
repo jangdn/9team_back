@@ -141,7 +141,10 @@ router.get('/call', function(req, res) {
 router.get('/phyAttr', function(req, res) {
     // deserializeUser에서 추가로 저장한 정보까지 전달 받음
     console.log(req.user);
-    return res.json(req.user.phy_attr);
+    const phyAttr = req.user.phy_attr;
+    const height = req.user.height;
+    const weight = req.user.weight;
+    return res.json({phyAttr, height, weight});
 });
 
 router.put('/phyAttr', function(req, res) {
@@ -151,8 +154,12 @@ router.put('/phyAttr', function(req, res) {
         if(err) return res.status(500).json({ error: 'database failure' });
         if(!user) return res.status(404).json({ error: 'user not found' });
         //ITEM
-        
-        user.phy_attr = req.body.phyAttr;
+        if(req.body.weight)
+            user.weight = req.body.weight;
+        if(req.body.height)
+            user.height = req.body.height;
+        if(req.body.phyAttr)
+            user.phy_attr = req.body.phyAttr;
         console.log(user.phy_attr);
         user.save(function(err){
             if(err) res.status(500).json({error: 'failed to update'});
