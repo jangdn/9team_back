@@ -318,14 +318,14 @@ router.get('/all', (req, res) => {
 });
 
 router.get('/recommandation', (req, res) => {
-  const recommandation_arr = ['재킷','점퍼','유니클로','슬렉스'];
+  const recommandation_arr = ['재킷','아우터','유니클로','하의'];
   //var tags = Array;
-  var tags = (recommandation_arr[(Math.floor(Math.random() * 10) + 1) % 5]);
+  var tags = (recommandation_arr[(Math.floor(Math.random() * 10) + 1) % 4]);
   
   const offset = Number(req.query.offset) || 0;
   const limit = Number(req.query.limit) || 20;
   console.log(tags, offset, limit);
-  Item.find({tags : {$all:tags}}).skip(offset).limit(limit)
+  Item.find({tags : tags}).skip(offset).limit(limit)
     .then((items) =>{
       res.json(items);
     })
