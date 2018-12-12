@@ -2,8 +2,6 @@ const request = require('request');
 const cheerio = require('cheerio');
 const Item = require('./model/model_items')
 var mongoose = require('mongoose');
-<<<<<<< HEAD
-=======
 
 var db = mongoose.connection;
 db.on('error', console.error);
@@ -12,7 +10,7 @@ db.once('open', function(){
 });
 
 mongoose.connect('mongodb://otjalan.ml/SEdb');
->>>>>>> 91330e66d46b7a944d64c7ccdee325cf5291b7cf
+
 
 //현재 Tops만
 cNo_list=[182,282,283,255,185,186,188,194,195,196,197,256,257,291,240,239,238,237,236];
@@ -59,12 +57,8 @@ async function crawlPage(url){
     });
 }
 
-<<<<<<< HEAD
+
 async function saveDB(dic){
-=======
-function saveDB(dic){
-    console.log("saveDB");
->>>>>>> 91330e66d46b7a944d64c7ccdee325cf5291b7cf
     var add_item = new Item();
     const randomstring = require("randomstring");
     add_item.itemId=randomstring.generate(10);
@@ -74,10 +68,7 @@ function saveDB(dic){
     add_item.image_link=dic['image_link'];
     add_item.main_ctg=dic['main_ctg'];
     add_item.sub_ctg=dic['sub_ctg'];
-<<<<<<< HEAD
     //add_item.color=dic['color'];
-=======
->>>>>>> 91330e66d46b7a944d64c7ccdee325cf5291b7cf
     add_item.tags.push(dic['brand']);
     add_item.tags.push(dic['main_ctg']);
     add_item.tags.push(dic['sub_ctg']);
