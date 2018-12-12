@@ -11,7 +11,6 @@ var ItemSchema = new Schema({
     "main_ctg" : String,
     "sub_ctg" : String,
     "brand" : String,
-    "color" : Array,
     "tags" : Array,
     "rating" : {type : Number, default : 0},
     "count" : {type : Number, default : 0},
