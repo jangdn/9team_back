@@ -34,13 +34,13 @@ async function crawlPage(url){
             const name = $(this).find('.name').find('a').text();
             dic['name']=name;
             dic['link']=productUrl;
-            dic['brand']='Topten';
+            dic['brand']='TOPTEN';
             dic['main_ctg']=categories[2].data;
             dic['sub_ctg']=categories[3].data;
-            const imglink = baseurl+$(this).find('img').attr('src');
+            const imglink = baseurl+$(this).find('.g_photo').find('img').attr('presrc');
             const price = $(this).find('.sale_price').text();
             dic['image_link']=imglink;
-            dic['price']=price;
+            dic['price']=price.split("원")[0];
             dic=fitCategory(dic);
             colors=[]
             var i=0;
@@ -49,8 +49,8 @@ async function crawlPage(url){
                 i++;
             })
             dic['otherColorsImage']=colors;
-            saveDB(dic);
-            //console.log(dic);
+            //saveDB(dic);
+            console.log(dic);
             index++;
         })
         return;
