@@ -104,7 +104,7 @@ function fitCategory(dic){
     else if(dic["main_ctg"]=="BOTTOMS"){
         dic["main_ctg"]="하의";
         if((dic["sub_ctg"].match("치노")=="치노")||(dic["sub_ctg"].match("팬츠")=="팬츠")){
-            dic["sub_ctg"]="팬츠"
+            dic["sub_ctg"]="팬츠";
         }
     }
     else if(dic["main_ctg"]=="OUTER"){
@@ -112,6 +112,13 @@ function fitCategory(dic){
         if(dic["name"].match("가죽")=="가죽"){
             dic["sub_ctg"]="가죽";
         }
+        else if(dic["sub_ctg"].match("점퍼/자켓")=="점퍼/자켓"){
+            dic["sub_ctg"]="점퍼";
+        }
+    }
+    else if(dic["main_ctg"].match("UNDERWEAR")=="UNDERWEAR"){
+        dic["main_ctg"]="기타";
+        dic["sub_ctg"]="속옷";
     }
     else{
         dic["main_ctg"]="기타";
