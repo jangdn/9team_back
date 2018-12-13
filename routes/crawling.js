@@ -49,8 +49,8 @@ async function crawlPage(url){
                 i++;
             })
             dic['otherColorsImage']=colors;
-            //saveDB(dic);
-            console.log(dic);
+            saveDB(dic);
+            //console.log(dic);
             index++;
         })
         return;
