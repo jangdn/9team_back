@@ -4,6 +4,7 @@ var mongoose = require('mongoose');
 const cheerio = require('cheerio');
 const request = require('request');
 const Item = require('./model/model_items')
+const Recommandation = require('./model/model_recommand')
 
 //1
 const itemData = [
@@ -318,15 +319,30 @@ router.get('/all', (req, res) => {
 });
 
 router.get('/recommandation', (req, res) => {
-  const recommandation_arr = ['재킷','아우터','유니클로','하의'];
+  //const recommandation_arr = ['재킷','아우터','유니클로','하의'];
   //var tags = Array;
-  var tags = (recommandation_arr[(Math.floor(Math.random() * 10) + 1) % 4]);
+  //var tags = (recommandation_arr[(Math.floor(Math.random() * 10) + 1) % 4]);
   
   const offset = Number(req.query.offset) || 0;
   const limit = Number(req.query.limit) || 20;
-  console.log(tags, offset, limit);
-  Item.find({tags : tags}).skip(offset).limit(limit)
-    .then((items) =>{
+  //console.log(tags, offset, limit);
+  //
+  Recommandation.find({},{"_id": false, "itemId" : true})
+    .then(itemIds =>{
+      var arritemIds = [];
+      console.log(itemIds.length);
+      for(var t = 0; t < itemIds.length ; t++){
+        arritemIds.push(itemIds[t].itemId);
+        console.log(arritemIds);
+
+      }
+      return arritemIds;
+    })
+    .then(itemIds =>{
+      console.log(itemIds);
+      return Item.find({'itemId' : {$in : itemIds}}).skip(offset).limit(limit)
+    })
+    .then((items) => {
       res.json(items);
     })
     .catch((err) => {

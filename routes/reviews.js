@@ -249,13 +249,15 @@ router.get('/users', (req, res) => {
 
 
 router.get('/today', (req, res) => {
-    Item.find({"rating" : {$gte:3}},{"itemId" : true})
+    Item.find({"count" : {$gte:2},"rating" : {$gte:3}},{"itemId" : true})
     .then(items =>{
         var rand = Math.floor(Math.random() * items.length);
         //var randomItem = randomItem(items);
         console.log(items[rand].itemId);
         var randItem = items[rand].itemId;
-        return Review.findOne({itemId : randItem});
+        console.log(items);
+
+    return Review.findOne({itemId : randItem});
     })
     .then((review) =>{
         res.json(review);
